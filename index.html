@@ -1,0 +1,126 @@
+<!doctype html>
+<meta charset=utf-8>
+<title>Rainbow.js</title>
+<style>
+body {
+	color: #666;
+	font-family: Arial;
+	width: 860px;
+	margin: 0 auto;
+}
+
+input[type="color"], span.result {
+	width: 100px;
+	height: 40px;
+	margin: 0px 10px;
+	padding: 0;
+	display: inline-block;
+	border: 1px solid #666;
+	position: relative;
+}
+
+span.result span {
+	position: absolute;
+	top: 45px;
+	width: 100px;
+	text-align: center;
+}
+
+.label {
+	width: 100px;
+	display: inline-block;
+	text-align: right;
+	line-height: 40px;
+	height: 40px;
+	vertical-align: top;
+}
+
+h1, h5 {
+	padding-left: 110px;
+}
+
+h5 {
+	font-weight: normal;
+	font-size: 18px;
+}
+
+.forkme {
+	position: absolute;
+	top: 0;
+	right: 0;
+}
+</style> 
+
+<h1>Rainbow.js</h1>
+<h5>Select the color relationships in the first row, the output base color in the second row and let the magic begin!</h5>
+<h5>Uses <a href="http://www.html5tutorial.info/html5-color.php">color inputs</a>, so Chrome is needed</h5>
+
+<p class="input">
+	<span class="label">Input scale</span>
+	<input type='color' name='color1' class="base-color" value="#a2e5ff"/>
+	<input type='color' name="color2" value="#21c1ff"/>
+	<input type='color' name='color3' value="#1eafe7" />
+	<input type='color' name='color4' value="#1a97c8" />
+	<input type='color' name='color5' value="#136c8f" />
+	<input type='color' name='color6' value="#0e4f68" />
+</p>
+
+<p class="output">
+	<span class="label">Output</span>
+	<input type="color" name="base-color2" value="#ffdda2"/>
+	<span class="result"> </span>
+	<span class="result"> </span>
+	<span class="result"> </span>
+	<span class="result"> </span>
+	<span class="result"> </span>
+</p>
+
+<script src="color_conversion.js"></script>
+<script src="rainbow.js"></script>
+
+<script>
+var inputs = document.body.querySelectorAll('p.input input[type="color"]');
+var outputs = document.body.querySelectorAll('p.output span.result');
+
+function getColorDifference(num) {
+	return getDifference(inputs[num+1].value, inputs[0].value);	
+}
+
+function refreshData() {
+	var outputBaseColor = document.body.querySelector('p.output input[type="color"]').value;
+
+	for (var i = 0; i < outputs.length; ++i) {
+		var color = getNewColor(outputBaseColor, getColorDifference(i));
+		outputs[i].style['background-color'] = color;
+		outputs[i].innerHTML = "<span>" + color + "</span>";
+	}
+}
+
+refreshData()
+
+for (var i = 0; i < inputs.length; ++i) {
+	inputs[i].addEventListener('change', function(){
+		refreshData()
+	})
+}
+
+document.body.querySelector('p.output input[type="color"]').addEventListener('change', function(){
+	refreshData()
+})
+</script>
+
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-6212472-4']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+<a class="forkme" href="http://github.com/rafeca/rainbow.js">
+  <img src="https://a248.e.akamai.net/assets.github.com/img/e6bef7a091f5f3138b8cd40bc3e114258dd68ddf/687474703a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f7265645f6161303030302e706e67" alt="Fork me on GitHub">
+</a>
