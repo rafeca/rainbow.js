@@ -5,18 +5,33 @@
 body {
 	color: #666;
 	font-family: Arial;
-	width: 860px;
+	width: 750px;
 	margin: 0 auto;
 }
 
 input[type="color"], span.result {
 	width: 100px;
 	height: 40px;
-	margin: 0px 10px;
+	margin: 5px 10px;
 	padding: 0;
 	display: inline-block;
-	border: 1px solid #666;
+	border: 1px solid #aaa;
 	position: relative;
+}
+
+input[type=color] {
+	padding: 5px;
+	width: 90px;
+	height: 30px;
+}
+
+input[type="color"]:hover {
+	background-color: rgb(255,252,209);
+	cursor: pointer;
+}
+
+input[type="color"]:active {
+	background-color: rgb(255,236,36);
 }
 
 span.result span {
@@ -27,21 +42,29 @@ span.result span {
 }
 
 .label {
-	width: 100px;
+	width: 122px;
 	display: inline-block;
 	text-align: right;
-	line-height: 40px;
-	height: 40px;
+	line-height: 50px;
+	height: 50px;
 	vertical-align: top;
+	font-size: 18px;
 }
 
-h1, h5 {
-	padding-left: 110px;
+.header {
+	text-align: center;
+	line-height: 20px;
+	height: 20px;
 }
 
 h5 {
 	font-weight: normal;
 	font-size: 18px;
+	margin: 20px 0;
+}
+
+header {
+	margin-bottom: 50px;
 }
 
 .forkme {
@@ -49,25 +72,86 @@ h5 {
 	top: 0;
 	right: 0;
 }
+
+p {
+	margin-left: -132px;
+}
+
+ {
+	margin-bottom: 0
+}
 </style> 
 
+<header>
 <h1>Rainbow.js</h1>
-<h5>Select the color relationships in the first row, the output base color in the second row and let the magic begin!</h5>
+<h5>Modify the input colors (first row and first column) and see how the rainbow comes to live!</h5>
 <h5>Uses <a href="http://www.html5tutorial.info/html5-color.php">color inputs</a>, so Chrome is needed</h5>
+</header>
+
+<p>
+	<span class="label header"> </span>
+	<span class="label header"><strong>Inputs</strong></span>
+	<span class="label header">Outputs</span>
+	<span class="label header">Outputs</span>
+	<span class="label header">Outputs</span>
+	<span class="label header">Outputs</span>
+	<span class="label header">Outputs</span>
+</p>
 
 <p class="input">
-	<span class="label">Input scale</span>
-	<input type='color' name='color1' class="base-color" value="#a2e5ff"/>
-	<input type='color' name="color2" value="#21c1ff"/>
-	<input type='color' name='color3' value="#1eafe7" />
-	<input type='color' name='color4' value="#1a97c8" />
-	<input type='color' name='color5' value="#136c8f" />
-	<input type='color' name='color6' value="#0e4f68" />
+	<span class="label"><strong>Inputs</strong></span>
+	
+	<input type='color' name='color1' class="base-color" value="#e9f9ff"/>
+	<input type='color' name='color1' class="scale" value="#a2e5ff"/>
+	<input type='color' name="color2" class="scale" value="#21c1ff"/>
+	<input type='color' name='color4' class="scale" value="#1a97c8" />
+	<input type='color' name='color6' class="scale" value="#0e4f68" />
+	<input type='color' name='color6' class="scale" value="#072632" />
 </p>
 
 <p class="output">
-	<span class="label">Output</span>
-	<input type="color" name="base-color2" value="#ffdda2"/>
+	<span class="label">Outputs</span>
+	<input type="color" class="base-color" value="#ebffe9"/>
+	<span class="result"> </span>
+	<span class="result"> </span>
+	<span class="result"> </span>
+	<span class="result"> </span>
+	<span class="result"> </span>
+</p>
+
+<p class="output">
+	<span class="label">Outputs</span>
+	<input type="color" class="base-color" value="#fffbe9"/>
+	<span class="result"> </span>
+	<span class="result"> </span>
+	<span class="result"> </span>
+	<span class="result"> </span>
+	<span class="result"> </span>
+</p>
+
+<p class="output">
+	<span class="label">Outputs</span>
+	<input type="color" class="base-color" value="#ffede9"/>
+	<span class="result"> </span>
+	<span class="result"> </span>
+	<span class="result"> </span>
+	<span class="result"> </span>
+	<span class="result"> </span>
+</p>
+
+<p class="output">
+	<span class="label">Outputs</span>
+	<input type="color" class="base-color" value="#ffe9ff"/>
+	<span class="result"> </span>
+	<span class="result"> </span>
+	<span class="result"> </span>
+	<span class="result"> </span>
+	<span class="result"> </span>
+</p>
+
+<p class="output">
+	<span class="label">Outputs</span>
+	<input type="color" class="base-color" value="#e9eaff"/>
 	<span class="result"> </span>
 	<span class="result"> </span>
 	<span class="result"> </span>
@@ -87,26 +171,30 @@ function getColorDifference(num) {
 }
 
 function refreshData() {
-	var outputBaseColor = document.body.querySelector('p.output input[type="color"]').value;
+	var outputRows = document.body.querySelectorAll('p.output');
 
-	for (var i = 0; i < outputs.length; ++i) {
-		var color = getNewColor(outputBaseColor, getColorDifference(i));
-		outputs[i].style['background-color'] = color;
-		outputs[i].innerHTML = "<span>" + color + "</span>";
+	for (var i = 0; i < outputRows.length; ++i) {
+
+		var baseColor = outputRows[i].querySelector('.base-color').value;
+		var outputCells = outputRows[i].querySelectorAll('.result');
+
+		for (var j = 0; j < outputCells.length; ++j) {
+			
+			var color = getNewColor(baseColor, getColorDifference(j));
+			outputCells[j].style['background-color'] = color;
+			outputCells[j].innerHTML = "<span>" + color + "</span>";
+		}
 	}
 }
 
 refreshData()
 
-for (var i = 0; i < inputs.length; ++i) {
-	inputs[i].addEventListener('change', function(){
+var colorInputs = document.body.querySelectorAll('input[type="color"]');
+for (var i = 0; i < colorInputs.length; ++i) {
+	colorInputs[i].addEventListener('change', function(){
 		refreshData()
 	})
 }
-
-document.body.querySelector('p.output input[type="color"]').addEventListener('change', function(){
-	refreshData()
-})
 </script>
 
 <script type="text/javascript">
